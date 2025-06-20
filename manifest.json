@@ -1,0 +1,25 @@
+{
+  "name": "Knowledge Challenge Quiz",
+  "short_name": "Quiz Challenge",
+  "description": "Interactive telecom knowledge quiz game for 1-4 players",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#DC143C",
+  "theme_color": "#DC143C",
+  "scope": "/",
+  "categories": ["games", "education"],
+  "lang": "en",
+  "icons": [
+    {
+      "src": "icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

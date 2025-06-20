@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Challenge Quiz - e&</title>
+    <meta name="description" content="Interactive 2-4 player telecom knowledge quiz game">
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#DC143C">
+    
+    <!-- Icons -->
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512x512.png">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Loading spinner -->
+        <div id="loading" class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Loading Quiz...</p>
+        </div>
+        
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen">
+            <div class="bg-overlay"></div>
+            <div class="bg-pattern"></div>
+            
+            <div class="container">
+                <!-- Logo and branding -->
+                <div class="branding">
+                    <div class="app-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h1>Knowledge Challenge</h1>
+                    <p>Test your telecom expertise</p>
+                </div>
+                
+                <!-- Player Selection -->
+                <div class="player-selection">
+                    <h2>Number of Players</h2>
+                    <div class="player-count-buttons">
+                        <button class="player-count-btn active" data-count="1">
+                            <i class="fas fa-user"></i> 1 Player
+                        </button>
+                        <button class="player-count-btn" data-count="2">
+                            <i class="fas fa-users"></i> 2 Players
+                        </button>
+                        <button class="player-count-btn" data-count="3">
+                            <i class="fas fa-users"></i> 3 Players
+                        </button>
+                        <button class="player-count-btn" data-count="4">
+                            <i class="fas fa-users"></i> 4 Players
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Player input form -->
+                <div class="player-inputs">
+                    <div class="input-card">
+                        <label><i class="fas fa-user"></i> Player 1</label>
+                        <input type="text" id="player1-name" placeholder="Enter name" maxlength="16" required>
+                    </div>
+                    
+                    <div class="input-card" id="player2-input">
+                        <label><i class="fas fa-user"></i> Player 2</label>
+                        <input type="text" id="player2-name" placeholder="Enter name" maxlength="16">
+                    </div>
+                    
+                    <div class="input-card hidden" id="player3-input">
+                        <label><i class="fas fa-user"></i> Player 3</label>
+                        <input type="text" id="player3-name" placeholder="Enter name" maxlength="16">
+                    </div>
+                    
+                    <div class="input-card hidden" id="player4-input">
+                        <label><i class="fas fa-user"></i> Player 4</label>
+                        <input type="text" id="player4-name" placeholder="Enter name" maxlength="16">
+                    </div>
+                </div>
+                
+                <button id="start-game" class="start-btn" disabled>
+                    <i class="fas fa-play"></i> Start Game
+                </button>
+            </div>
+        </div>
+        
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen hidden">
+            <div class="bg-overlay"></div>
+            <div class="bg-pattern"></div>
+            
+            <div class="game-container">
+                <!-- Player panels on left -->
+                <div class="player-panel">
+                    <div class="player-card active" id="player1-card">
+                        <div class="player-avatar">P1</div>
+                        <div class="player-info">
+                            <h3 id="player1-display">Player 1</h3>
+                            <div class="player-score" id="player1-score">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="player-card" id="player2-card">
+                        <div class="player-avatar">P2</div>
+                        <div class="player-info">
+                            <h3 id="player2-display">Player 2</h3>
+                            <div class="player-score" id="player2-score">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="player-card hidden" id="player3-card">
+                        <div class="player-avatar">P3</div>
+                        <div class="player-info">
+                            <h3 id="player3-display">Player 3</h3>
+                            <div class="player-score" id="player3-score">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="player-card hidden" id="player4-card">
+                        <div class="player-avatar">P4</div>
+                        <div class="player-info">
+                            <h3 id="player4-display">Player 4</h3>
+                            <div class="player-score" id="player4-score">0</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game area -->
+                <div class="game-area">
+                    <!-- Progress bar -->
+                    <div class="progress-section">
+                        <div class="progress-info">
+                            <span>Question <span id="current-question">1</span> of <span id="total-questions">20</span></span>
+                            <span id="current-player-indicator">Player 1's Turn</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Timer -->
+                    <div class="timer-section">
+                        <div class="timer-circle">
+                            <svg class="timer-ring">
+                                <circle cx="50" cy="50" r="45" class="timer-bg"></circle>
+                                <circle cx="50" cy="50" r="45" class="timer-progress" id="timer-progress"></circle>
+                            </svg>
+                            <span id="timer-text">30</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Question -->
+                    <div class="question-section">
+                        <h3 id="question-text">Loading question...</h3>
+                        <div id="choices-container" class="choices">
+                            <!-- Choices will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <button id="next-question" class="next-btn hidden">
+                        Next Question <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Result Screen -->
+        <div id="result-screen" class="screen hidden">
+            <div class="bg-overlay"></div>
+            <div class="bg-pattern"></div>
+            
+            <div class="container">
+                <!-- Celebration header -->
+                <div class="celebration">
+                    <div class="trophy-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h1 id="result-title">Game Complete!</h1>
+                    <p id="result-subtitle">Great job!</p>
+                </div>
+                
+                <!-- Final scores -->
+                <div class="final-scores">
+                    <div class="final-score">
+                        <h3 id="final-player1-name">Player 1</h3>
+                        <div class="score-display">
+                            <span id="final-player1-score">0</span>
+                            <span class="score-total">/ 10</span>
+                        </div>
+                        <p id="final-player1-accuracy">0% Accuracy</p>
+                    </div>
+                    
+                    <div class="final-score">
+                        <h3 id="final-player2-name">Player 2</h3>
+                        <div class="score-display">
+                            <span id="final-player2-score">0</span>
+                            <span class="score-total">/ 10</span>
+                        </div>
+                        <p id="final-player2-accuracy">0% Accuracy</p>
+                    </div>
+                    
+                    <div class="final-score hidden" id="final-player3-score">
+                        <h3 id="final-player3-name">Player 3</h3>
+                        <div class="score-display">
+                            <span id="final-player3-score">0</span>
+                            <span class="score-total">/ 10</span>
+                        </div>
+                        <p id="final-player3-accuracy">0% Accuracy</p>
+                    </div>
+                    
+                    <div class="final-score hidden" id="final-player4-score">
+                        <h3 id="final-player4-name">Player 4</h3>
+                        <div class="score-display">
+                            <span id="final-player4-score">0</span>
+                            <span class="score-total">/ 10</span>
+                        </div>
+                        <p id="final-player4-accuracy">0% Accuracy</p>
+                    </div>
+                </div>
+                
+                <!-- Action buttons -->
+                <div class="result-actions">
+                    <button id="play-again" class="play-again-btn">
+                        <i class="fas fa-redo"></i> Play Again
+                    </button>
+                    <button id="share-result" class="share-btn">
+                        <i class="fas fa-share"></i> Share Result
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="questions.js"></script>
+    <script src="app.js"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => console.log('SW registered'))
+                    .catch(error => console.log('SW registration failed'));
+            });
+        }
+    </script>
+</body>
+</html>
